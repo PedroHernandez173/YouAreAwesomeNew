@@ -10,8 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var message = ""
     @State private var imageName = ""
-    @State private var imageNumber = 0
-    @State private var messageNumber = 0
+    @State private var lastMessageNumber = -1
+    @State private var lastImageNumber = -1
     
     var body: some View {
         
@@ -25,7 +25,6 @@ struct ContentView: View {
                 .frame(height: 120)
                 .animation(.easeInOut(duration: 0.15), value: message)
 
-            
             Image(imageName)
                 .resizable()
                 .scaledToFit()
@@ -44,10 +43,27 @@ struct ContentView: View {
                                 "Fabulous? That's You!",
                                 "You Make Me Smile!",]
                 
-                message = messages[Int.random(in: 0...messages.count-1)]
+                // generate a random messageNumber to use as an index
+                // if messageNumber == lastMessageNumber {
+                //    keep generating a new random messageNumber
+                //    untill you get a messageNumber != lastMessageNumber
+                // set messageString to messages[messageNumber]
+                // update the lastMesssageNumber with messageNumber
                 
-                imageName = "image\(Int.random(in: 0...9))"
-
+                var MessageNumber: Int
+                repeat {
+                    MessageNumber = Int.random(in: 0...messages.count-1)
+                } while MessageNumber == lastMessageNumber
+                message = messages[MessageNumber]
+                lastImageNumber = MessageNumber
+                
+//                imageName = "image\(Int.random(in: 0...9))"
+                var imageNumber = Int.random(in: 0...9)
+                repeat{
+                    imageNumber = Int.random(in: 0...9)
+                } while imageNumber == lastImageNumber
+                imageName = "image\(imageNumber)"
+                lastImageNumber = imageNumber
             }
             .buttonStyle(.borderedProminent)
             .font(.title2)
